@@ -1,0 +1,20 @@
+
+
+<h2 class="text-xl text-center mb-3">Fourth Component</h2>
+
+<section class="w-full md:w-[900px] m-auto flex justify-between items-center">
+
+  <a [routerLink]="['/' + ngxRouteService.routes.third.fn({ id: '123', type: 'sword' })]"  class="px-2 py-1 rounded-xl shadow-md text-center bg-red-700 text-white inline-block">
+    Prev
+  </a>
+
+  <div>
+    <h3 class="text-lg">Snapshot state</h3>
+    <span> [ id: {{ ngxRouteService.routes.third.params.id.snapshotValue() }} ] </span>
+  </div>
+
+  <a [routerLink]="['/' + ngxRouteService.routes.fifth.fn({ userRole: 'fourth Id', state: 'in active' })]" class="px-2 py-1 rounded-xl shadow-md text-center bg-red-700 text-white inline-block">
+    Next
+  </a>
+
+</section>

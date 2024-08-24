@@ -1,0 +1,107 @@
+
+<section class="w-full h-fit bg-purple-50 p-10">
+  <h1 class="text-3xl text-center mb-5">Ngx Route Manager Demo</h1>
+
+  <section class="flex flex-col gap-5 justify-center w-full">
+    <div class="flex flex-wrap gap-10 justify-center w-full">
+      <div class="p-2 border border-gray-300 rounded-lg">
+        <h2 class="text-xl">First component</h2>
+
+        <a [routerLink]="['/' + ngxRouteService.routes.first.fn({})]" class="px-2 py-1 rounded-xl shadow-md text-center bg-red-700 text-white inline-block">
+          Go to first
+        </a>
+
+        <div>
+          <span>Path: </span><span>{{ ngxRouteService.routes.first.path }}</span>
+        </div>
+        <div>
+          <span>URL: </span><span>{{ ngxRouteService.routes.first.fn({}) }}</span>
+        </div>
+        <div>
+          <span>Listen: </span><span></span>
+        </div>
+      </div>
+
+      <div class="p-2 border border-gray-300 rounded-lg">
+        <h2 class="text-xl">Second component</h2>
+
+        <a [routerLink]="['/' + ngxRouteService.routes.second.fn({})]" class="px-2 py-1 rounded-xl shadow-md text-center bg-red-700 text-white inline-block">
+          Go to second
+        </a>
+
+        <div>
+          <span>Path: </span><span>{{ ngxRouteService.routes.second.path }}</span>
+        </div>
+        <div>
+          <span>URL: </span><span>{{ ngxRouteService.routes.second.fn({}) }}</span>
+        </div>
+        <div>
+          <span>Listen: </span><span></span>
+        </div>
+      </div>
+
+      <div class="p-2 border border-gray-300 rounded-lg">
+        <h2 class="text-xl">Third component</h2>
+
+        <a [routerLink]="['/' + ngxRouteService.routes.third.fn({ id: '123', type: 'sword' })]" class="px-2 py-1 rounded-xl shadow-md text-center bg-red-700 text-white inline-block">
+          Go to third
+        </a>
+
+        <div>
+          <span>Path: </span><span>{{ ngxRouteService.routes.third.path }}</span>
+        </div>
+        <div>
+          <span>URL: </span><span>{{ ngxRouteService.routes.third.fn({ id: '123', type: 'sword' }) }}</span>
+        </div>
+        <div>
+          <span>Listen: </span><span>[ id: {{ ngxRouteService.routes.third.params.id.listenForValue() | async }}, type: {{ ngxRouteService.routes.third.params.type.listenForValue() | async }} ]</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap gap-10 justify-center w-full">
+      <div class="p-2 border border-gray-300 rounded-lg">
+        <h2 class="text-xl">Fourth component</h2>
+
+        <a [routerLink]="['/' + ngxRouteService.routes.fourth.fn({ id: 'fourth Id' })]" class="px-2 py-1 rounded-xl shadow-md text-center bg-red-700 text-white inline-block">
+          Go to fourth
+        </a>
+
+        <div>
+          <span>Path: </span><span>{{ ngxRouteService.routes.fourth.path }}</span>
+        </div>
+        <div>
+          <span>URL: </span><span>{{ ngxRouteService.routes.fourth.fn({ id: 'fourth Id' }) }}</span>
+        </div>
+
+        <div>
+          <span>Listen: </span><span>[ id: {{ ngxRouteService.routes.fourth.params.id.listenForValue() | async }} ]</span>
+        </div>
+      </div>
+
+      <div class="p-2 border border-gray-300 rounded-lg">
+        <h2 class="text-xl">Fifth component</h2>
+
+        <a [routerLink]="['/' + ngxRouteService.routes.fifth.fn({ userRole: 'guest', state: 'active' })]" class="px-2 py-1 rounded-xl shadow-md text-center bg-red-700 text-white inline-block">
+          Go to fifth
+        </a>
+
+        <div>
+          <span>Path: </span><span>{{ ngxRouteService.routes.fifth.path }}</span>
+        </div>
+        <div>
+          <span>URL: </span><span>{{ ngxRouteService.routes.fifth.fn({ userRole: 'guest', state: 'active' }) }}</span>
+        </div>
+
+        <div>
+          <span>Listen: </span><span>[ userRole: {{ ngxRouteService.routes.fifth.params.userRole.listenForValue() | async }}, state: {{ ngxRouteService.routes.fifth.params.state.listenForValue() | async }} ]</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</section>
+
+<section class="w-full py-10">
+  <router-outlet />
+</section>
