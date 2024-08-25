@@ -1,0 +1,22 @@
+<h2 class="text-xl text-center">Sixth Component</h2>
+<h2 class="text-sm text-center mb-3">Using directive to get the ngx routes</h2>
+
+<!-- You can pass the directive here just to access the ngx routes -->
+<span [NgxRouteManager]="routeType" #ngxRM="NgxRouteManager"></span>
+
+<section class="w-full md:w-[900px] m-auto flex justify-between items-center">
+
+  <a [routerLink]="['/' + ngxRM.routes.fifth.fn({ userRole: 'fourth Id', state: 'in active' })]" class="px-2 py-1 rounded-xl shadow-md text-center bg-red-700 text-white inline-block">
+    Prev
+  </a>
+
+  <div>
+    <h3 class="text-lg">Snapshot state</h3>
+    <span> [ date: {{ ngxRM.routes.sixth.params.date.snapshotValue() }} , options: {{ ngxRM.routes.sixth.params.options.snapshotValue() }} ] </span>
+  </div>
+
+  <a [routerLink]="['/' + ngxRM.routes.first.fn()]" class="px-2 py-1 rounded-xl shadow-md text-center bg-red-700 text-white inline-block">
+    Next
+  </a>
+
+</section>

@@ -7,7 +7,7 @@
       <div class="p-2 border border-gray-300 rounded-lg">
         <h2 class="text-xl">First component</h2>
 
-        <a [routerLink]="['/' + ngxRouteService.routes.first.fn({})]" class="px-2 py-1 rounded-xl shadow-md text-center bg-red-700 text-white inline-block">
+        <a [routerLink]="['/' + ngxRouteService.routes.first.fn()]" class="px-2 py-1 rounded-xl shadow-md text-center bg-red-700 text-white inline-block">
           Go to first
         </a>
 
@@ -15,7 +15,7 @@
           <span>Path: </span><span>{{ ngxRouteService.routes.first.path }}</span>
         </div>
         <div>
-          <span>URL: </span><span>{{ ngxRouteService.routes.first.fn({}) }}</span>
+          <span>URL: </span><span>{{ ngxRouteService.routes.first.fn() }}</span>
         </div>
         <div>
           <span>Listen: </span><span></span>
@@ -25,7 +25,7 @@
       <div class="p-2 border border-gray-300 rounded-lg">
         <h2 class="text-xl">Second component</h2>
 
-        <a [routerLink]="['/' + ngxRouteService.routes.second.fn({})]" class="px-2 py-1 rounded-xl shadow-md text-center bg-red-700 text-white inline-block">
+        <a [routerLink]="['/' + ngxRouteService.routes.second.fn()]" class="px-2 py-1 rounded-xl shadow-md text-center bg-red-700 text-white inline-block">
           Go to second
         </a>
 
@@ -33,7 +33,7 @@
           <span>Path: </span><span>{{ ngxRouteService.routes.second.path }}</span>
         </div>
         <div>
-          <span>URL: </span><span>{{ ngxRouteService.routes.second.fn({}) }}</span>
+          <span>URL: </span><span>{{ ngxRouteService.routes.second.fn() }}</span>
         </div>
         <div>
           <span>Listen: </span><span></span>
@@ -95,6 +95,26 @@
 
         <div>
           <span>Listen: </span><span>[ userRole: {{ ngxRouteService.routes.fifth.params.userRole.listenForValue() | async }}, state: {{ ngxRouteService.routes.fifth.params.state.listenForValue() | async }} ]</span>
+        </div>
+      </div>
+
+      <div class="p-2 border border-gray-300 rounded-lg">
+        <h2 class="text-xl">Sixth component</h2>
+        <h2 class="text-sm">Using directive</h2>
+
+        <a [routerLink]="['/' + ngxRouteService.routes.sixth.fn({ date: '24th July 2005', options: 'option z' })]" class="px-2 py-1 rounded-xl shadow-md text-center bg-red-700 text-white inline-block">
+          Go to sixth
+        </a>
+
+        <div>
+          <span>Path: </span><span>{{ ngxRouteService.routes.sixth.path }}</span>
+        </div>
+        <div>
+          <span>URL: </span><span>{{ ngxRouteService.routes.sixth.fn({ date: '24th July 2005', options: 'option z'}) }}</span>
+        </div>
+
+        <div>
+          <span>Listen: </span><span>[ date: {{ ngxRouteService.routes.sixth.params.date.listenForValue() | async }}, options: {{ ngxRouteService.routes.sixth.params.options.listenForValue() | async }} ]</span>
         </div>
       </div>
     </div>

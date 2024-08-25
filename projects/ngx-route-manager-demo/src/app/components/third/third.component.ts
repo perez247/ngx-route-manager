@@ -1,17 +1,17 @@
 import { Component } from '@angular/core';
 import { NgxRouteManagerService } from 'ngx-route-manager';
-import { NgxRouteType } from '../../src/app/ngx-routes';
 import { RouterLink } from '@angular/router';
+import { NgxRouteType } from '../../ngx-routes';
 
 @Component({
-  selector: 'app-second',
+  selector: 'app-third',
   standalone: true,
   imports: [RouterLink],
   providers: [NgxRouteManagerService],
-  templateUrl: './second.component.html',
-  styleUrl: './second.component.scss'
+  templateUrl: './third.component.html',
+  styleUrl: './third.component.scss'
 })
-export class SecondComponent {
+export class ThirdComponent {
 
   constructor(
     public ngxRouteService: NgxRouteManagerService<NgxRouteType>

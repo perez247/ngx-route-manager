@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NgxRouteManagerComponent } from './ngx-route-manager.component';
+import { SixthComponent } from './sixth.component';
 
-describe('NgxRouteManagerComponent', () => {
-  let component: NgxRouteManagerComponent;
-  let fixture: ComponentFixture<NgxRouteManagerComponent>;
+describe('SixthComponent', () => {
+  let component: SixthComponent;
+  let fixture: ComponentFixture<SixthComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NgxRouteManagerComponent]
+      imports: [SixthComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(NgxRouteManagerComponent);
+    fixture = TestBed.createComponent(SixthComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

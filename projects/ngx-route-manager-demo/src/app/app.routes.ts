@@ -1,11 +1,11 @@
 import { Routes } from '@angular/router';
 import { ngxRoutes } from './ngx-routes';
-import { FirstComponent } from '../../components/first/first.component';
-import { SecondComponent } from '../../components/second/second.component';
-import { ThirdComponent } from '../../components/third/third.component';
-import { FourthComponent } from '../../components/fourth/fourth.component';
-import { FifthComponent } from '../../components/fifth/fifth.component';
-
+import { FifthComponent } from './components/fifth/fifth.component';
+import { FirstComponent } from './components/first/first.component';
+import { FourthComponent } from './components/fourth/fourth.component';
+import { SecondComponent } from './components/second/second.component';
+import { ThirdComponent } from './components/third/third.component';
+import { SixthComponent } from './components/sixth/sixth.component';
 
 export const routes: Routes = [
   {
@@ -27,6 +27,10 @@ export const routes: Routes = [
   {
     path: ngxRoutes.fifth.path,
     component: FifthComponent
+  },
+  {
+    path: ngxRoutes.sixth.path,
+    component: SixthComponent
   }
 
 ];
