@@ -1,8 +1,12 @@
 {
   "name": "ngx-route-manager",
-  "version": "0.0.1",
-  "license": "MIT",
-  "author": { "name": "Excellence Pere" },
+  "version": "1.0.0",
+  "description": "A route management library for Angular",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "ng-packagr -p ng-package.json"
+  },
   "peerDependencies": {
     "@angular/common": "^18.1.0",
     "@angular/core": "^18.1.0"
@@ -10,5 +14,13 @@
   "dependencies": {
     "tslib": "^2.3.0"
   },
+  "keywords": ["angular", "routing", "route-management"],
+  "author": "perez247",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/perez247/ngx-route-manager.git"
+  },
+  "homepage": "https://github.com/perez247/ngx-route-manager#readme",
   "sideEffects": false
 }
