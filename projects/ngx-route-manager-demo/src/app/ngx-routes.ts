@@ -11,5 +11,3 @@ export const ngxRoutes = {
 
 // Type is needed to keep consistency
 export type NgxRouteType = typeof ngxRoutes;
-
-ngxRoutes.first.fn()

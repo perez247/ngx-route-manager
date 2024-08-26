@@ -1,6 +1,6 @@
 import { Directive, Input } from '@angular/core';
-import { NgxRouteManagerService } from '../services/ngx-route-manager.service';
 import { ActivatedRoute } from '@angular/router';
+import { NgxRouteManagerInternalService } from '../services/ngx-route-manager-internal.service';
 
 @Directive({
   selector: '[NgxRouteManager]',
@@ -11,10 +11,10 @@ export class NgxRmDirective<T> {
   @Input('NgxRouteManager') routeType!: T;
 
   constructor(
-    private ngxRouteManagerService: NgxRouteManagerService<T>,
+    private ngxRouteManagerService: NgxRouteManagerInternalService<T>,
     route: ActivatedRoute,
   ) {
-    this.ngxRouteManagerService.initiailizeRoute(route);
+    this.ngxRouteManagerService.reInitialize(route);
   }
 
   get routes(): T {

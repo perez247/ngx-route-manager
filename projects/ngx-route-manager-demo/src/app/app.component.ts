@@ -17,6 +17,7 @@ export class AppComponent {
 
   constructor(
     public ngxRouteService: NgxRouteManagerService<NgxRouteType>
-  ) { }
-
+  ) {
+    this.ngxRouteService.routes.fifth.params.state.listenForValue()
+  }
 }

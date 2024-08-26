@@ -1,14 +1,10 @@
 import { NgModule, ModuleWithProviders, InjectionToken } from '@angular/core';
-import { NgxRouteManagerService } from './lib/services/ngx-route-manager.service';
 import { NgxRmDirective } from './lib/directives/ngx-rm.directive';
+import { NgxRouteManagerInternalService } from './lib/services/ngx-route-manager-internal.service';
 
 
 export const NGX_ROUTE_MANAGER_CONFIG = new InjectionToken<any>('NGX_ROUTE_MANAGER_CONFIG');
-export const NGX_ROUTE_MANAGER_TYPE = new InjectionToken<any>('NGX_ROUTE_MANAGER_TYPE');
 
-export function routeManagerConfigFactory<T>(config: T): () => T {
-  return () => config;
-}
 @NgModule({
   imports: [NgxRmDirective],
   exports: [NgxRmDirective]
@@ -18,13 +14,10 @@ export class NgxRouteManagerModule {
     return {
       ngModule: NgxRouteManagerModule,
       providers: [
+        NgxRouteManagerInternalService,
         {
           provide: NGX_ROUTE_MANAGER_CONFIG,
-          useFactory: routeManagerConfigFactory(config)
-        },
-        {
-          provide: NGX_ROUTE_MANAGER_TYPE,
-          useValue: typeof config
+          useValue: config
         }
       ]
     };
