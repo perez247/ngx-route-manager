@@ -1,6 +1,6 @@
 {
   "name": "ngx-route-manager",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A route management library for Angular",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

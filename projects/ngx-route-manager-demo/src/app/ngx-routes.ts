@@ -1,7 +1,7 @@
 import { generateNgxRoute } from "ngx-route-manager";
 
 export const ngxRoutes = {
-  first: generateNgxRoute(''),
+  first: generateNgxRoute(),
   second: generateNgxRoute('second'),
   third: generateNgxRoute(':id/:type'),
   fourth: generateNgxRoute('admin/users/:id'),
