@@ -17,7 +17,7 @@ export class NgxRouteManagerModule {
         NgxRouteManagerInternalService,
         {
           provide: NGX_ROUTE_MANAGER_CONFIG,
-          useValue: config
+          useValue: config as T
         }
       ]
     };

@@ -6,7 +6,7 @@ export const ngxRoutes = {
   third: generateNgxRoute(':id/:type'),
   fourth: generateNgxRoute('admin/users/:id'),
   fifth: generateNgxRoute(':userRole/users/:state'),
-  sixth: generateNgxRoute(':date/a/users/:options'),
+  sixth: generateNgxRoute(':date/a/users-08/:options'),
 }
 
 // Type is needed to keep consistency
