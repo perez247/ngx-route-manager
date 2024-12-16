@@ -55,14 +55,14 @@ import { NgxRouteManagerModule } from  'ngx-route-manager';
 // Using with App.modules.ts (none standalone)
 imports: [
 	...
-	NgxRouteManagerModule.forRoot<ngxRouteType>(ngxRoutes),
+	NgxRouteManagerModule.forRoot(ngxRoutes),
 	...
 ]
 
 // Using with app.config.ts (standalone)
 providers: [
 	...
-	importProvidersFrom(NgxRouteManagerModule.forRoot<ngxRouteType>(ngxRoutes)),
+	importProvidersFrom(NgxRouteManagerModule.forRoot(ngxRoutes)),
 	...
 ]
 ```
@@ -70,18 +70,22 @@ providers: [
 ## Use
 
 **Service**
-The service contains a `routes` property which should be of the custom generic type `ngxRouteType`. It is advised to use the `routes` from the service because some internal functions have been performed on it.
+We strongly advice you extend the library service. By doing so, you can pass the generic type just once.
 
 ```
-import { NgxRouteManagerService } from  'ngx-route-manager';
+
+@Injectable()
+export class CustomManagerService extends NgxRouteManagerService<NgxRouteType> {}
+
+...
 
 @Component({
 ...
-providers: [NgxRouteManagerService],
+providers: [CustomManagerService],
 ...
 })
 export class YourComponent {
-  constructor(private ngxRMService: NgxRouteManagerService<ngxRouteType>) {}
+  constructor(private ngxRMService: CustomManagerService) {}
 
   getRoutes() {
     const homeRoute = this.ngxRMService.routes.home.fn(); // outputs: ''
@@ -108,24 +112,29 @@ export class YourComponent {
 ```
 
 **Directive**
-Same with the service, the directive contains a `routes` property which should be of the custom generic type `ngxRouteType`.
+Same with the service, we advice extending the library directive.
 
 ```
-import { NgxRmDirective } from  'ngx-route-manager';
+@Directive({
+  selector: '[CustomNgxRouteManager]',
+  standalone: true,
+  exportAs: 'CustomNgxRouteManager',
+})
+export class CustomNgxRmDirective extends NgxRmDirective<NgxRouteType> {}
+
+...
+
 
 @Component({
 ...
-imports: [NgxRmDirective], // For standalone components
+imports: [CustomNgxRmDirective], // For standalone components
 ...
 })
-export class YourComponent {
-	routeType:  ngxRouteType  = {} as  ngxRouteType; // Type is needed for the directive
-	...
-}
+export class YourComponent {}
 
 html file
 <!-- You can pass the directive here just to access the ngx routes -->
-<span  [NgxRouteManager]="routeType"  #ngxRM="NgxRouteManager"></span>
+<span CustomNgxRouteManager #ngxRM="CustomNgxRouteManager"></span>
 
 <h2>Links</h2> -------------------------------------------------------------------
 
