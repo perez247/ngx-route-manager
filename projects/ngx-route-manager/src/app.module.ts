@@ -9,13 +9,13 @@ export const NGX_ROUTE_MANAGER_CONFIG = new InjectionToken<any>('NGX_ROUTE_MANAG
   exports: [NgxRmDirective]
 })
 export class NgxRouteManagerModule {
-  static forRoot<T>(config: T): ModuleWithProviders<NgxRouteManagerModule> {
+  static forRoot(config: any): ModuleWithProviders<NgxRouteManagerModule> {
     return {
       ngModule: NgxRouteManagerModule,
       providers: [
         {
           provide: NGX_ROUTE_MANAGER_CONFIG,
-          useValue: config as T
+          useValue: config
         }
       ]
     };
