@@ -1,7 +1,6 @@
 import { RouteParams } from "../functions/convertUrlTo";
 import { ExtractStaticSegments, SegmentObject } from "../functions/convertUrlToSegment";
 import { ParamsToFunction } from "../functions/createUrlFunction";
-import { NgxSegment } from "./ngx-segment";
 
 export class NgxRoute<T extends string> {
   /**
