@@ -5,7 +5,7 @@ export type RouteParams<T extends string> = {
   [K in ExtractRouteParams<T>]: NgxParam;
 };
 
-type ExtractRouteParams<T extends string> =
+export type ExtractRouteParams<T extends string> =
   T extends `${infer _}:${infer Param}/${infer Rest}`
     ? Param | ExtractRouteParams<Rest>
     : T extends `${infer _}:${infer Param}`

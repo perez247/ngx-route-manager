@@ -1,6 +1,6 @@
 {
   "name": "ngx-route-manager",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A route management library for Angular",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -16,6 +16,12 @@
   },
   "keywords": ["angular", "routing", "route-management"],
   "author": "perez247",
+  "contributors": [
+    {
+      "name": "elsamzzy",
+      "url": "https://github.com/elsamzzy"
+    }
+  ],
   "license": "MIT",
   "repository": {
     "type": "git",

@@ -70,7 +70,7 @@ providers: [
 ## Use
 
 **Service**
-The service contains a `routes` property which should be of the custom generic type `ngxRouteType`. It is advised to use the `routes` from the service because some internal functions have been performed on it.
+The service contains a `routes` property which should be of the custom generic type `ngxRouteType`. It is advised to use the `routes` from the service because some internal functions have been performed on it. This inlcudes instantiating the ActivatedRoute else you can use `ngxRoutes` for most of your tasks.
 
 ```
 import { NgxRouteManagerService } from  'ngx-route-manager';
