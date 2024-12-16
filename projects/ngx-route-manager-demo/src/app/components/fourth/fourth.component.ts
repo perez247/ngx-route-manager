@@ -1,19 +1,18 @@
 import { Component } from '@angular/core';
-import { NgxRouteManagerService } from 'ngx-route-manager';
 import { RouterLink } from '@angular/router';
-import { NgxRouteType } from '../../ngx-routes';
+import { CustomManagerService } from '../../services/custom-route-manager.service';
 
 @Component({
   selector: 'app-fourth',
   standalone: true,
   imports: [RouterLink],
-  providers: [NgxRouteManagerService],
+  providers: [CustomManagerService],
   templateUrl: './fourth.component.html',
   styleUrl: './fourth.component.scss'
 })
 export class FourthComponent {
 
   constructor(
-    public ngxRouteService: NgxRouteManagerService<NgxRouteType>
+    public ngxRouteService: CustomManagerService
   ) { }
 }

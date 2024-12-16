@@ -7,7 +7,7 @@ export const ngxRoutes = {
   fourth: generateNgxRoute('admin/users/:id'),
   fifth: generateNgxRoute(':userRole/users/:state'),
   sixth: generateNgxRoute(':date/a/users/:options'),
-}
+};
 
 // Type is needed to keep consistency
 export type NgxRouteType = typeof ngxRoutes;

@@ -2,11 +2,9 @@
 <h2 class="text-sm text-center mb-3">Using directive to get the ngx routes</h2>
 
 <!-- You can pass the directive here just to access the ngx routes -->
-<span [NgxRouteManager]="routeType" #ngxRM="NgxRouteManager"></span>
-
 <section class="w-full md:w-[900px] m-auto flex justify-between items-center">
 
-  <a [routerLink]="['/' + ngxRM.routes.fifth.fn({ userRole: 'fourth Id', state: 'in active' })]" class="px-2 py-1 rounded-xl shadow-md text-center bg-red-700 text-white inline-block">
+  <a CustomNgxRouteManager #ngxRM="CustomNgxRouteManager" [routerLink]="['/' + ngxRM.routes.fifth.fn({ userRole: 'fourth Id', state: 'in active' })]" class="px-2 py-1 rounded-xl shadow-md text-center bg-red-700 text-white inline-block">
     Prev
   </a>
 

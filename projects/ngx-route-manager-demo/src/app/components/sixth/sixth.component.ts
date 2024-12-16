@@ -1,15 +1,13 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { NgxRmDirective } from 'ngx-route-manager';
-import { NgxRouteType } from '../../ngx-routes';
+import { CustomNgxRmDirective } from '../../directives/custom-ngx-rm.directive';
 
 @Component({
   selector: 'app-sixth',
   standalone: true,
-  imports: [RouterLink, NgxRmDirective],
+  imports: [RouterLink, CustomNgxRmDirective],
   templateUrl: './sixth.component.html',
   styleUrl: './sixth.component.scss'
 })
 export class SixthComponent {
-  routeType: NgxRouteType = {} as NgxRouteType;
 }
