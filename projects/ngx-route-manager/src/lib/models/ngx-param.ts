@@ -1,23 +1,24 @@
-import { ActivatedRoute } from "@angular/router";
-import { filter, map, Observable, of } from "rxjs";
-import { internalActivatedRoute } from "../services/ngx-route-manager.service";
+import { filter, map, of } from "rxjs";
 import { computed } from "@angular/core";
+import { internalSignalRoute } from "../functions/listenForRouteChange";
 
 export class NgxParam {
 
-  route = internalActivatedRoute.route;
   /**
    * Name of the param
    */
-  readonly name: string = '';
+  private readonly _name: string = '';
+  public get name(): string {
+    return this._name;
+  }
 
   /**
    * Returns the current snapshoot of the value in the url route
    */
   readonly snapshotValue = computed(() => {
-    if (!internalActivatedRoute.route()) { return '' }
+    if (!internalSignalRoute()) { return '' }
     else {
-      return internalActivatedRoute.route()?.snapshot.paramMap.get(this.name) || ''
+      return internalSignalRoute()?.snapshot.paramMap.get(this.name) || ''
     }
   })
 
@@ -25,9 +26,12 @@ export class NgxParam {
    * Listens for change on param in the route
    */
   readonly listenForValue = computed(() => {
-    if (!internalActivatedRoute.route()) { return of('') }
+    if (!internalSignalRoute()) { 
+      console.log(internalSignalRoute());
+      return of('') 
+    }
     else {
-      return internalActivatedRoute.route()?.paramMap
+      return internalSignalRoute()?.paramMap
       .pipe(
         filter(paramMap => paramMap.has(this.name)),
         map(paramMap => paramMap.get(this.name) || '')
@@ -36,6 +40,6 @@ export class NgxParam {
   })
 
   constructor(name: string) {
-    this.name = name;
+    this._name = name;
   }
 }
