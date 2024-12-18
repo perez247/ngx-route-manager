@@ -1,13 +1,10 @@
-import { NgModule, ModuleWithProviders, InjectionToken } from '@angular/core';
-import { NgxRmDirective } from './lib/directives/ngx-rm.directive';
-
+import { NgModule, ModuleWithProviders, InjectionToken, APP_INITIALIZER } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { listenForRouteChange } from './lib/functions/listenForRouteChange';
 
 export const NGX_ROUTE_MANAGER_CONFIG = new InjectionToken<any>('NGX_ROUTE_MANAGER_CONFIG');
 
-@NgModule({
-  imports: [NgxRmDirective],
-  exports: [NgxRmDirective]
-})
+@NgModule({})
 export class NgxRouteManagerModule {
   static forRoot(config: any): ModuleWithProviders<NgxRouteManagerModule> {
     return {
@@ -16,6 +13,12 @@ export class NgxRouteManagerModule {
         {
           provide: NGX_ROUTE_MANAGER_CONFIG,
           useValue: config
+        },
+        {
+          provide: APP_INITIALIZER,
+          useFactory: listenForRouteChange,
+          deps: [Router, ActivatedRoute],
+          multi: true
         }
       ]
     };
