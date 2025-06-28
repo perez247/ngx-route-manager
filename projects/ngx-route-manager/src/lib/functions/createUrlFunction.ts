@@ -1,56 +1,115 @@
+type ExtractParams<T extends string> =
+  T extends `${infer _Start}:${infer Param}/${infer Rest}`
+    ? Param | ExtractParams<Rest>
+    : T extends `${infer _Start}:${infer Param}`
+    ? Param
+    : never;
 
-// type ExtractParams<T extends string> =
-//     T extends `${infer _Start}:${infer Param}/${infer Rest}` ?
-//         Param | ExtractParams<Rest> :
-//     T extends `${infer _Start}:${infer Param}` ?
-//         Param :
-//     string;
+type HasParams<T extends string> = ExtractParams<T> extends never
+  ? false
+  : true;
 
-// // export type ParamsToFunction<T extends string> =
-// //     ExtractParams<T> extends infer U extends string ?
-// //         U extends string ?
-// //             (args: Record<U, string>) => string :
-// //         string :
-// //     string;
+export type ParamsToFunction<
+  T extends string,
+  Q extends string
+> = HasParams<T> extends true
+  ? (
+      args: Record<ExtractParams<T>, string>,
+      queryParams?: Partial<Record<Q, string>>
+    ) => string
+  : (args?: undefined, queryParams?: Partial<Record<Q, string>>) => string;
 
-// export type ParamsToFunction<T extends string> =
-//     ExtractParams<T> extends never ? // No parameters detected
-//         () => string :
-//     ExtractParams<T> extends infer U extends string ? // Parameters detected
-//         (args: Record<U, string>) => string :
-//     never;
+export interface NgxParseUrl {
+  route: string[];
+  extras: {
+    queryParams: {
+      [k: string]: string;
+    };
+  };
+}
 
-// export function createUrlFunction<T extends string>(template: T): ParamsToFunction<T> {
-//     return ((args: Record<string, string>) => {
-//         return template.replace(/:([a-zA-Z]+)/g, (_, key) => {
-//           if (!args) throw new Error("No arguments provided");
-//           return args[key];
-//         });
-//     }) as ParamsToFunction<T>;
-// }
-
-type ExtractParams<T extends string> = T extends `${infer _Start}:${infer Param}/${infer Rest}`
-  ? Param | ExtractParams<Rest>
-  : T extends `${infer _Start}:${infer Param}`
-  ? Param
-  : never;
-
-type HasParams<T extends string> = ExtractParams<T> extends never ? false : true;
-
-export type ParamsToFunction<T extends string> = HasParams<T> extends true
-  ? (args: Record<ExtractParams<T>, string>) => string
-  : () => string;
-
-export function createUrlFunction<T extends string>(template: T): ParamsToFunction<T> {
-  return ((args?: Record<string, string>) => {
-    if (args === undefined && template.includes(':')) {
+export function createUrlFunction<T extends string, Q extends string>(
+  template: T,
+  queryParamsKeys?: Q
+): ParamsToFunction<T, Q> {
+  return ((
+    args?: Record<string, string>,
+    queryParams?: Record<string, string>
+  ) => {
+    if (!args && template.includes(':')) {
       throw new Error('Arguments are required for this template');
     }
-    if (args !== undefined && !template.includes(':')) {
+    if (args && !template.includes(':')) {
       throw new Error('This template does not accept any arguments');
     }
-    return template.replace(/:([a-zA-Z]+)/g, (_, key) => {
-      return args?.[key] ?? '';
+
+    let path = template.replace(/:([a-zA-Z]+)/g, (_, key) => {
+      const value = args?.[key];
+      if (value === undefined)
+        throw new Error(`Missing value for parameter: ${key}`);
+      return value;
     });
-  }) as ParamsToFunction<T>;
+
+    if (queryParams && Object.keys(queryParams).length > 0) {
+      const searchParams = new URLSearchParams(queryParams).toString();
+      path += `?${searchParams}`;
+    }
+
+    return path;
+  }) as ParamsToFunction<T, Q>;
+}
+
+export type ParamsToUrlFunction<
+  T extends string,
+  Q extends string
+> = HasParams<T> extends true
+  ? (
+      args: Record<ExtractParams<T>, string>,
+      queryParams?: Partial<Record<Q, string>>
+    ) => NgxParseUrl
+  : (args?: undefined, queryParams?: Partial<Record<Q, string>>) => NgxParseUrl;
+
+export function createUrlFunctionV2<T extends string, Q extends string>(
+  template: T,
+  queryParamsKeys?: Q
+): ParamsToUrlFunction<T, Q> {
+  return ((
+    args?: Record<string, string>,
+    queryParams?: Record<string, string>
+  ) => {
+    if (!args && template.includes(':')) {
+      throw new Error('Arguments are required for this template');
+    }
+    if (args && !template.includes(':')) {
+      throw new Error('This template does not accept any arguments');
+    }
+
+    let path = template.replace(/:([a-zA-Z]+)/g, (_, key) => {
+      const value = args?.[key];
+      if (value === undefined)
+        throw new Error(`Missing value for parameter: ${key}`);
+      return value;
+    });
+
+    if (queryParams && Object.keys(queryParams).length > 0) {
+      const searchParams = new URLSearchParams(queryParams).toString();
+      path += `?${searchParams}`;
+    }
+
+    return parseUrl(path);
+  }) as ParamsToUrlFunction<T, Q>;
+}
+
+export function parseUrl(url: string): NgxParseUrl {
+  const [path, queryString] = url.split('?');
+  const params = new URLSearchParams(queryString || '');
+  const queryParams: Record<string, string> = {};
+  params.forEach((value, key) => {
+    queryParams[key] = value;
+  });
+
+  return {
+    route: [path],
+    extras: { queryParams },
+  };
 }
