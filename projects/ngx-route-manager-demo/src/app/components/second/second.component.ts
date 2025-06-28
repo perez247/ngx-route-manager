@@ -7,8 +7,12 @@ import { ngxRoutes } from '../../ngx-routes';
   standalone: true,
   imports: [RouterLink],
   templateUrl: './second.component.html',
-  styleUrl: './second.component.scss'
+  styleUrl: './second.component.scss',
 })
 export class SecondComponent {
   routes = ngxRoutes;
+  url = this.routes.third.url(
+    { id: '123', type: 'sword' },
+    { state: 'state', q: 'query' }
+  );
 }
