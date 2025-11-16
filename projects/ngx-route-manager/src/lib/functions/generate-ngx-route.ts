@@ -1,8 +1,8 @@
 import { createUrlFunction, createUrlFunctionV2 } from './createUrlFunction';
-import { urlToNgxParam } from './convertUrlTo';
+import { urlToNgxParam } from '../utils/convertUrlTo';
 import { NgxRoute } from '../models/ngx-route';
-import { urlToSegments } from './convertUrlToSegment';
-import { urlToNgxQueryParam } from './convertStringArrayTo';
+import { urlToSegments } from '../utils/convertUrlToSegment';
+import { urlToNgxQueryParam } from '../utils/convertStringArrayTo';
 
 export function generateNgxRoute<T extends string, Q extends string>(
   urlPattern?: T,

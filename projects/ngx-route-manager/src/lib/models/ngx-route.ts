@@ -1,9 +1,9 @@
-import { RouteQueryParams } from '../functions/convertStringArrayTo';
-import { RouteParams } from '../functions/convertUrlTo';
+import { RouteQueryParams } from '../utils/convertStringArrayTo';
+import { RouteParams } from '../utils/convertUrlTo';
 import {
   ExtractStaticSegments,
   SegmentObject,
-} from '../functions/convertUrlToSegment';
+} from '../utils/convertUrlToSegment';
 import {
   ParamsToFunction,
   ParamsToUrlFunction,
