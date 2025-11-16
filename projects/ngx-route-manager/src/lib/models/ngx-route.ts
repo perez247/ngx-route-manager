@@ -1,9 +1,9 @@
-import { RouteQueryParams } from '../functions/convertStringArrayTo';
-import { RouteParams } from '../functions/convertUrlTo';
+import { RouteQueryParams } from '../utils/convertStringArrayTo';
+import { RouteParams } from '../utils/convertUrlTo';
 import {
   ExtractStaticSegments,
   SegmentObject,
-} from '../functions/convertUrlToSegment';
+} from '../utils/convertUrlToSegment';
 import {
   ParamsToFunction,
   ParamsToUrlFunction,
@@ -16,7 +16,8 @@ export class NgxRoute<T extends string, Q extends string> {
   readonly path: string = '';
 
   /**
-   * Function to generate the url, requiring the right params
+   * @deprecated This is deprecated, use `url` instead.
+   * @description Function to generate the url, requiring the right params
    */
   readonly fn: ParamsToFunction<T, Q> = {} as ParamsToFunction<T, Q>;
 
