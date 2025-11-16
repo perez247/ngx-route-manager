@@ -1,6 +1,6 @@
 {
   "name": "ngx-route-manager",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "A route management library for Angular",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -14,7 +14,11 @@
   "dependencies": {
     "tslib": "^2.3.0"
   },
-  "keywords": ["angular", "routing", "route-management"],
+  "keywords": [
+    "angular",
+    "routing",
+    "route-management"
+  ],
   "author": "perez247",
   "contributors": [
     {

@@ -3,4 +3,4 @@
  */
 
 export { NgxRouteManagerModule } from './app.module';
-export { generateNgxRoute } from './lib/functions/generate-path';
+export { generateNgxRoute } from './lib/functions/generate-ngx-route';

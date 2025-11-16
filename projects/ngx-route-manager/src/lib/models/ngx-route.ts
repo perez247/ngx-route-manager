@@ -16,7 +16,8 @@ export class NgxRoute<T extends string, Q extends string> {
   readonly path: string = '';
 
   /**
-   * Function to generate the url, requiring the right params
+   * @deprecated This is deprecated, use `url` instead.
+   * @description Function to generate the url, requiring the right params
    */
   readonly fn: ParamsToFunction<T, Q> = {} as ParamsToFunction<T, Q>;
 

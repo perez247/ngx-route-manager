@@ -54,7 +54,7 @@ export const routes: Routes = [
 		component: ...
 	}
 ]
- ```
+```
 
 **Step 3** Register in App.modules.ts or app.config.ts
 
@@ -81,6 +81,7 @@ providers: [
 Simply call the route created into the component, directive etc for use
 
 Component.ts
+
 ```
 @Component({})
 export class YourComponent {
@@ -118,6 +119,7 @@ export class YourComponent {
 ```
 
 Component.html
+
 ```
 html file
 
@@ -153,23 +155,25 @@ html file
 ## Properties
 
 ### NgxRoute
+
 generateNgxRoute return a NgxRoute Object
 
-|Name            |Description
-|----------------|-------------------------------
-|path: string            |The path used for setting the routes in app.routes/app-routing.module.ts
-|fn: (params< T >) => string | The function that enforces the right params in order to generate the right url string
-|url: (params< T >) => NgxParseUrl | The function that enforces the right params in order to generate a parsed url object
-|params: RouteParams       | Contains all the params (**NgxParam**) generated from the url string pattern passed
-|queryParams: RouteQueryParams       | Contains all the query params (**NgxParam**) generated from the query params keys passed
-|segments:        | Contains the different none params of the url string pattern passed
+| Name                              | Description                                                                                                                 |
+| --------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| path: string                      | The path used for setting the routes in app.routes/app-routing.module.ts                                                    |
+| fn: (params< T >) => string       | The function that enforces the right params in order to generate the right url string. This is deprecated in favor of url() |
+| url: (params< T >) => NgxParseUrl | The function that enforces the right params in order to generate a parsed url object                                        |
+| params: RouteParams               | Contains all the params (**NgxParam**) generated from the url string pattern passed                                         |
+| queryParams: RouteQueryParams     | Contains all the query params (**NgxParam**) generated from the query params keys passed                                    |
+| segments:                         | Contains the different none params of the url string pattern passed                                                         |
 
 ### NgxParam
+
 These are the types of object found in the RouteParams.
 
-|Name            |Description
-|----------------|-------------------------------
-|snapshotValue: string            |Returns the current value of the param in the url if found (same as ActivatedRoute:snapshot)
-|listenForValue: observable< string > | Returns an observable that listens for changes in the url, to get the param value (same as ActivatedRoute:paramMap)
+| Name                                 | Description                                                                                                                                                                                |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| snapshotValue: string                | Returns the current value of the param in the url if found (same as ActivatedRoute:snapshot)                                                                                               |
+| listenForValue: observable< string > | Returns an observable that listens for changes in the url, to get the param value (same as ActivatedRoute:paramMap). Recommended to be used within the HTML file and/or ngOnint() for now. |
 
 **Note:** The file `generate-path.ts` has been renamed to `generate-ngx-route.ts`.
