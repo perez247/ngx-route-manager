@@ -11,7 +11,7 @@ import { ngxRoutes } from '../../ngx-routes';
 })
 export class SecondComponent {
   routes = ngxRoutes;
-  url = this.routes.third.url(
+  url = this.routes.third.fn(
     { id: '123', type: 'sword' },
     { state: 'state', q: 'query' }
   );

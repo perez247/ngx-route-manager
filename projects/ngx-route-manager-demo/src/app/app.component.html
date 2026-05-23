@@ -6,12 +6,12 @@
       <div class="p-2 border border-gray-300 rounded-lg">
         <h2 class="text-xl">First component</h2>
 
-        <a
-          [routerLink]="['/' + routes.first.fn()]"
+        <button
+          (click)="navigateTo(routes.first.fn())"
           class="px-2 py-1 rounded-xl shadow-md text-center bg-red-700 text-white inline-block"
         >
           Go to first
-        </a>
+        </button>
 
         <div>
           <span>Path: </span><span>{{ routes.first.path }}</span>
@@ -25,12 +25,12 @@
       <div class="p-2 border border-gray-300 rounded-lg">
         <h2 class="text-xl">Second component</h2>
 
-        <a
-          [routerLink]="['/' + routes.second.fn()]"
+        <button
+          (click)="navigateTo(routes.second.fn())"
           class="px-2 py-1 rounded-xl shadow-md text-center bg-red-700 text-white inline-block"
         >
           Go to second
-        </a>
+        </button>
 
         <div>
           <span>Path: </span><span>{{ routes.second.path }}</span>
@@ -44,27 +44,27 @@
       <div class="p-2 border border-gray-300 rounded-lg">
         <h2 class="text-xl">Third component</h2>
 
-        <a
-          [routerLink]="['/' + routes.third.fn({ id: '123', type: 'sword' })]"
+        <button
+          (click)="navigateTo(routes.third.fn({ id: '123', type: 'sword' }, { state: 'active', q: 'search' }))"
           class="px-2 py-1 rounded-xl shadow-md text-center bg-red-700 text-white inline-block"
         >
           Go to third
-        </a>
+        </button>
 
         <div>
           <span>Path: </span><span>{{ routes.third.path }}</span>
         </div>
         <div>
           <span>URL: </span
-          ><span>{{ routes.third.fn({ id: "123", type: "sword" }) }}</span>
+          ><span>{{ routes.third.fn({ id: "123", type: "sword" }, { state: 'active', q: 'search' }) }}</span>
         </div>
         <div>
           <span>Listen: </span
           ><span
-            >[ id: {{ routes.third.params.id.listenForValue() | async }}, type:
-            {{ routes.third.params.type.listenForValue() | async }}, state:
-            {{ routes.third.queryParams.state.listenForValue() | async }}, q:
-            {{ routes.third.queryParams.q.listenForValue() | async }}, ]</span
+            >[ id: {{ routeManager.getParamStream(routes.third.params.id) | async }}, type:
+            {{ routeManager.getParamStream(routes.third.params.type) | async }}, state:
+            {{ routeManager.getQueryParamStream(routes.third.queryParams.state) | async }}, q:
+            {{ routeManager.getQueryParamStream(routes.third.queryParams.q) | async }}, ]</span
           >
         </div>
       </div>
@@ -74,12 +74,12 @@
       <div class="p-2 border border-gray-300 rounded-lg">
         <h2 class="text-xl">Fourth component</h2>
 
-        <a
-          [routerLink]="['/' + routes.fourth.fn({ id: 'fourth Id' })]"
+        <button
+          (click)="navigateTo(routes.fourth.fn({ id: 'fourth Id' }))"
           class="px-2 py-1 rounded-xl shadow-md text-center bg-red-700 text-white inline-block"
         >
           Go to fourth
-        </a>
+        </button>
 
         <div>
           <span>Path: </span><span>{{ routes.fourth.path }}</span>
@@ -93,7 +93,7 @@
           <span>Listen: </span
           ><span
             >[ id:
-            {{ routes.fourth.params.id.listenForValue() | async }} ]</span
+            {{ routeManager.getParamStream(routes.fourth.params.id) | async }} ]</span
           >
         </div>
       </div>
@@ -101,14 +101,12 @@
       <div class="p-2 border border-gray-300 rounded-lg">
         <h2 class="text-xl">Fifth component</h2>
 
-        <a
-          [routerLink]="[
-            '/' + routes.fifth.fn({ userRole: 'guest', state: 'active' })
-          ]"
+        <button
+          (click)="navigateTo(routes.fifth.fn({ userRole: 'guest', state: 'active' }))"
           class="px-2 py-1 rounded-xl shadow-md text-center bg-red-700 text-white inline-block"
         >
           Go to fifth
-        </a>
+        </button>
 
         <div>
           <span>Path: </span><span>{{ routes.fifth.path }}</span>
@@ -124,8 +122,8 @@
           <span>Listen: </span
           ><span
             >[ userRole:
-            {{ routes.fifth.params.userRole.listenForValue() | async }}, state:
-            {{ routes.fifth.params.state.listenForValue() | async }} ]</span
+            {{ routeManager.getParamStream(routes.fifth.params.userRole) | async }}, state:
+            {{ routeManager.getParamStream(routes.fifth.params.state) | async }} ]</span
           >
         </div>
       </div>
@@ -134,15 +132,12 @@
         <h2 class="text-xl">Sixth component</h2>
         <h2 class="text-sm">Using directive</h2>
 
-        <a
-          [routerLink]="[
-            '/' +
-              routes.sixth.fn({ date: '24th July 2005', options: 'option z' })
-          ]"
+        <button
+          (click)="navigateTo(routes.sixth.fn({ date: '24th July 2005', options: 'option z' }))"
           class="px-2 py-1 rounded-xl shadow-md text-center bg-red-700 text-white inline-block"
         >
           Go to sixth
-        </a>
+        </button>
 
         <div>
           <span>Path: </span><span>{{ routes.sixth.path }}</span>
@@ -157,9 +152,9 @@
         <div>
           <span>Listen: </span
           ><span
-            >[ date: {{ routes.sixth.params.date.listenForValue() | async }},
+            >[ date: {{ routeManager.getParamStream(routes.sixth.params.date) | async }},
             options:
-            {{ routes.sixth.params.options.listenForValue() | async }} ]</span
+            {{ routeManager.getParamStream(routes.sixth.params.options) | async }} ]</span
           >
         </div>
       </div>

@@ -56,6 +56,14 @@ export class NgxRoute<T extends string, Q extends string> {
     this._params = params;
     this._segments = segments;
     this._queryParams = queryParams;
+
+    // Set parent on params and query params
+    Object.values(this._params).forEach((param: any) => {
+      param._parent = this;
+    });
+    Object.values(this._queryParams).forEach((param: any) => {
+      param._parent = this;
+    });
   }
 
   /**
