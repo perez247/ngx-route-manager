@@ -11,15 +11,15 @@
   <div>
     <h3 class="text-lg">Snapshot state</h3>
     <span>
-      [ id: {{ routes.third.params.id.snapshotValue() }}, type:
-      {{ routes.third.params.type.snapshotValue() }} ]
+      [ id: {{ routeManager.getParamSnapshot(routes.third.params.id) }}, type:
+      {{ routeManager.getParamSnapshot(routes.third.params.type) }} ]
     </span>
   </div>
   <div>
     <h3 class="text-lg">Query params Snapshot state</h3>
     <span>
-      [ state: {{ routes.third.queryParams.state.snapshotValue() }}, q:
-      {{ routes.third.queryParams.q.snapshotValue() }} ]
+      [ state: {{ routeManager.getQueryParamSnapshot(routes.third.queryParams.state) }}, q:
+      {{ routeManager.getQueryParamSnapshot(routes.third.queryParams.q) }} ]
     </span>
   </div>
 

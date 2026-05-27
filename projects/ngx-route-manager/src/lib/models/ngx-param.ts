@@ -1,7 +1,3 @@
-import { filter, map, of } from "rxjs";
-import { computed } from "@angular/core";
-import { internalSignalRoute } from "../functions/listenForRouteChange";
-
 export class NgxParam {
 
   /**
@@ -13,31 +9,9 @@ export class NgxParam {
   }
 
   /**
-   * Returns the current snapshoot of the value in the url route
+   * @internal
    */
-  readonly snapshotValue = computed(() => {
-    if (!internalSignalRoute()) { return '' }
-    else {
-      return internalSignalRoute()?.snapshot.paramMap.get(this.name) || ''
-    }
-  })
-
-  /**
-   * Listens for change on param in the route
-   */
-  readonly listenForValue = computed(() => {
-    if (!internalSignalRoute()) { 
-      console.log(internalSignalRoute());
-      return of('') 
-    }
-    else {
-      return internalSignalRoute()?.paramMap
-      .pipe(
-        filter(paramMap => paramMap.has(this.name)),
-        map(paramMap => paramMap.get(this.name) || '')
-      )
-    }
-  })
+  public _parent?: any;
 
   constructor(name: string) {
     this._name = name;

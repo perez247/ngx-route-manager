@@ -52,7 +52,7 @@ function buildUrl<T extends string>(
 
   if (queryParams && Object.keys(queryParams).length > 0) {
     const searchParams = new URLSearchParams(queryParams).toString();
-    path += `?${searchParams}`;
+    path += (path.includes('?') ? '&' : '?') + searchParams;
   }
 
   return path;
@@ -76,7 +76,7 @@ export function createUrlFunctionV2<T extends string, Q extends string>(
     args?: Record<string, string>,
     queryParams?: Record<string, string>
   ) => {
-    const path = buildUrl(template, args, queryParams);
-    return parseUrl(path);
+    const fullUrl = buildUrl(template, args, queryParams);
+    return parseUrl(fullUrl);
   }) as ParamsToUrlFunction<T, Q>;
 }

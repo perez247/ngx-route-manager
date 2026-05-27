@@ -1,6 +1,6 @@
 # Ngx Route Manager
 
-An angular library that provide an easy way to manage your routes. No more magic string for routing.
+An angular library that provides an easy way to manage your routes. No more magic strings for routing.
 
 ## Installation
 
@@ -10,170 +10,116 @@ An angular library that provide an easy way to manage your routes. No more magic
 
 **Step 1** Create routes
 
-Calling the generateNgxRoute creates an NgxRoute object which will be used through out the application
+Calling `generateNgxRoute` creates an `NgxRoute` object which will be used throughout the application. It is recommended to define these in a central file.
 
-```
+```typescript
 import { generateNgxRoute } from "ngx-route-manager";
 
 export const ngxRoutes = {
-	home: generateNgxRoute(), // generateNgxRoute creates an object
-	users: generateNgxRoute('users'),
-	singleUser: generateNgxRoute('users/:id', ['debug']),
-	productCart: generateNgxRoute('product/:productId/cart/:cartId'),
+  home: generateNgxRoute(),
+  users: generateNgxRoute('users'),
+  singleUser: generateNgxRoute('users/:id', ['debug']),
+  productCart: generateNgxRoute('product/:productId/cart/:cartId'),
 }
 ```
 
 **Step 2** Add to the angular routes
 
-```
+Use the `.path` property to define your Angular route configurations.
+
+```typescript
 export const routes: Routes = [
-	{
-		path: ngxRoutes.home.path,
-		component: HomeComponent
-	},
-	{
-		path: a.users.path,
-		component: UsersComponent
-	},
-	{
-		path: a.singleUser.path,
-		component: ViewSingleUserComponent
-	},
-	{
-		path: a.productCart.path,
-		component: ViewProductCartComponent
-	},
-
-	// You can add segments
-	{
-		path: ngxRoutes.productCart.segments.cart // cart,
-		component: ...
-	},
-	{
-		path: ngxRoutes.singleUser.segments.users// users,
-		component: ...
-	}
+  {
+    path: ngxRoutes.home.path,
+    component: HomeComponent
+  },
+  {
+    path: ngxRoutes.users.path,
+    component: UsersComponent
+  },
+  {
+    path: ngxRoutes.singleUser.path,
+    component: ViewSingleUserComponent
+  },
+  {
+    path: ngxRoutes.productCart.path,
+    component: ViewProductCartComponent
+  }
 ]
 ```
 
-**Step 3** Register in App.modules.ts or app.config.ts
+**Step 3** No Global Registration Required
 
-```
-import { NgxRouteManagerModule } from 'ngx-route-manager';
-
-// Using with App.modules.ts (none standalone)
-imports: [
-	...
-	NgxRouteManagerModule.forRoot(ngxRoutes),
-	...
-]
-
-// Using with app.config.ts (standalone)
-providers: [
-	...
-	importProvidersFrom(NgxRouteManagerModule.forRoot(ngxRoutes)),
-	...
-]
-```
+The library is purely service-driven. No module registration or providers are required in your `AppModule` or `ApplicationConfig`.
 
 ## Use
 
-Simply call the route created into the component, directive etc for use
+Inject `NgxRouteManagerService` to access parameter values reactively or as snapshots.
 
-Component.ts
+### Component.ts
 
-```
-@Component({})
+```typescript
+import { Component, inject } from '@angular/core';
+import { NgxRouteManagerService } from 'ngx-route-manager';
+import { ngxRoutes } from './ngx-routes';
+
+@Component({ ... })
 export class YourComponent {
+  private routeManager = inject(NgxRouteManagerService);
   routes = ngxRoutes;
 
   getRoutes() {
-    const homeRoute = routes.home.fn(); // outputs: ''
-    const usersRoute = routes.users.fn(); // outputs: 'users'
-    const singleUserRoute = routes.singleUser.fn({ id: '1234' }, { debug: 'true' }); // outputs: 'users/1234?debug=true'
-    const productCartRoute = routes.productCart.fn({ productId: '1234', cartId: 'abgh' }) // outputs: 'product/1234/cart/abgh'
+    // Generate URL strings for navigation
+    const homeRoute = this.routes.home.fn(); // ""
+    const singleUserRoute = this.routes.singleUser.fn({ id: '1234' }, { debug: 'true' }); // "users/1234?debug=true"
   }
 
-  getParsedRoutes() {
-    const singleUserRoute = routes.singleUser.url({ id: '1234' }, { debug: 'true' });
-    // outputs: { route: ['users/1234'], extras: { queryParams: { debug: 'true' } } }
+  getSnapshots() {
+    // Get current values immediately
+    const id = this.routeManager.getParamSnapshot(this.routes.singleUser.params.id);
+    const debug = this.routeManager.getQueryParamSnapshot(this.routes.singleUser.queryParams.debug);
   }
 
-  getSnapshot() {
-    const singleUserId = routes.singleUser.params.id.snapshotValue();
-    const productId = routes.productCart.params.productId.snapshotValue();
-    const cartId = routes.productCart.params.cartId.snapshotValue();
-    const debug = routes.singleUser.queryParams.debug.snapshotValue();
-  }
-
-  listenForValueChanges() {
-    // listenForValue() returns an observable that checks for the change in value for the param in the url
-    const singleUserIdSub = routes.singleUser.params.id.listenForValue().subscribe(...);
-    const productIdSub = routes.productCart.params.productId.listenForValue().subscribe(...);
-    const cartIdSub = routes.productCart.params.cartId.listenForValue().subscribe(...);
-    const debugSub = routes.singleUser.queryParams.debug.listenForValue().subscribe(...);
-
-    // Remember to destroy subscriptions
+  getStreams() {
+    // Get Observables for reactive updates
+    const id$ = this.routeManager.getParamStream(this.routes.singleUser.params.id);
+    const debug$ = this.routeManager.getQueryParamStream(this.routes.singleUser.queryParams.debug);
   }
 }
 ```
 
-Component.html
+### Component.html
 
-```
-html file
+```html
+<!-- Navigation -->
+<!-- Use the generated URL string directly -->
+<a [routerLink]="'/' + routes.singleUser.fn({ id: '1234' })">View User</a>
 
-<h2>Links</h2> -------------------------------------------------------------------
-
-<-- / -->
-<a [routerLink]="['/' + routes.home.fn()]">Home</a>
-
-<-- /users -->
-<a [routerLink]="['/' + routes.users.fn()]">User List</a>
-
-<-- /users/1234?debug=true -->
-<a [routerLink]="['/' + routes.singleUser.fn({ id: '1234' }, { debug: 'true' })]">Single user</a>
-
-<-- /product/111/cart/abgh -->
-<a [routerLink]="['/' + routes.productCart.fn({ productId: '1234', cartId: 'abgh' })]">Single user</a>
-
-<h2>Snapshot</h2> -------------------------------------------------------------------
-
-<p>Single User Id: {{ routes.singleUser.params.id.snapshotValue() }}</p>
-<p>Product Id: {{ routes.productCart.params.productId.snapshotValue() }}</p>
-<p>Cart Id: {{ routes.productCart.params.cartId.snapshotValue() }}</p>
-<p>Debug: {{ routes.singleUser.queryParams.debug.snapshotValue() }}</p>
-
-<h2>Subscriptions</h2> -------------------------------------------------------------------
-
-<p>Single User Id: {{ routes.singleUser.params.id.listenForValue() | async }}</p>
-<p>Product Id: {{ routes.productCart.params.productId.listenForValue() | async }}</p>
-<p>Cart Id: {{ routes.productCart.params.cartId.listenForValue() | async }}</p>
-<p>Debug: {{ routes.singleUser.queryParams.debug.listenForValue() | async }}</p>
+<!-- Display values reactively using the async pipe -->
+<p>User ID: {{ routeManager.getParamStream(routes.singleUser.params.id) | async }}</p>
+<p>Debug: {{ routeManager.getQueryParamStream(routes.singleUser.queryParams.debug) | async }}</p>
 ```
 
-## Properties
+## API Reference
+
+### NgxRouteManagerService
+
+| Method | Description |
+| --- | --- |
+| `getParamSnapshot(param, route?)` | Gets the current value of a path parameter. |
+| `getParamStream(param, route?)` | Returns an `Observable<string>` that emits the parameter value on changes. |
+| `getQueryParamSnapshot(param, route?)` | Gets the current value of a query parameter. |
+| `getQueryParamStream(param, route?)` | Returns an `Observable<string>` that emits the query parameter value on changes. |
+
+*Note: You can optionally pass an `ActivatedRoute` to these methods to scope the lookup to a specific branch of the route tree. By default, the service resolves the correct route based on the `NgxRoute` configuration.*
 
 ### NgxRoute
 
-generateNgxRoute return a NgxRoute Object
-
-| Name                              | Description                                                                                                                 |
-| --------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| path: string                      | The path used for setting the routes in app.routes/app-routing.module.ts                                                    |
-| fn: (params< T >) => string       | The function that enforces the right params in order to generate the right url string. This is deprecated in favor of url() |
-| url: (params< T >) => NgxParseUrl | The function that enforces the right params in order to generate a parsed url object                                        |
-| params: RouteParams               | Contains all the params (**NgxParam**) generated from the url string pattern passed                                         |
-| queryParams: RouteQueryParams     | Contains all the query params (**NgxParam**) generated from the query params keys passed                                    |
-| segments:                         | Contains the different none params of the url string pattern passed                                                         |
-
-### NgxParam
-
-These are the types of object found in the RouteParams.
-
-| Name                                 | Description                                                                                                                                                                                |
-| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| snapshotValue: string                | Returns the current value of the param in the url if found (same as ActivatedRoute:snapshot)                                                                                               |
-| listenForValue: observable< string > | Returns an observable that listens for changes in the url, to get the param value (same as ActivatedRoute:paramMap). Recommended to be used within the HTML file and/or ngOnint() for now. |
-
-**Note:** The file `generate-path.ts` has been renamed to `generate-ngx-route.ts`.
+| Property | Description |
+| --- | --- |
+| `path` | The path string for Angular route configuration. |
+| `fn(params, queryParams)` | Generates a URL string based on provided params and query params. |
+| `url(params, queryParams)` | Generates a parsed URL object (useful for `Router.navigate`). |
+| `params` | Collection of `NgxParam` objects derived from the path pattern. |
+| `queryParams` | Collection of `NgxQueryParam` objects derived from the provided keys. |
+| `segments` | Static segments of the path pattern. |

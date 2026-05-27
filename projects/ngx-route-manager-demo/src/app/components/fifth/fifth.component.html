@@ -1,5 +1,3 @@
-
-
 <h2 class="text-xl text-center mb-3">Fifth Component</h2>
 
 <section class="w-full md:w-[900px] m-auto flex justify-between items-center">
@@ -10,7 +8,7 @@
 
   <div>
     <h3 class="text-lg">Snapshot state</h3>
-    <span> [ userRole: {{ routes.fifth.params.userRole.snapshotValue() }}, state: {{ routes.fifth.params.state.snapshotValue() }} ] </span>
+    <span> [ userRole: {{ routeManager.getParamSnapshot(routes.fifth.params.userRole) }}, state: {{ routeManager.getParamSnapshot(routes.fifth.params.state) }} ] </span>
   </div>
 
   <a [routerLink]="['/' + routes.sixth.fn({ date: '2001-sept-20', options: 'option 194' })]" class="px-2 py-1 rounded-xl shadow-md text-center bg-red-700 text-white inline-block">
