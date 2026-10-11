@@ -1,58 +1,31 @@
 # Ngx Route Manager
 
-  
-
 An angular library that provide an easy way to manage your routes. No more magic string for routing.
-
-  
 
 ## Installation
 
-  
-
 `npm install ngx-route-manager`
-
-  
 
 ## Setup
 
-  
-
 **Step 1** Create routes
-
-  
 
 Calling the generateNgxRoute creates an NgxRoute object which will be used through out the application
 
-  
-
 ```
-
 import { generateNgxRoute } from "ngx-route-manager";
 
-  
-
 export const ngxRoutes = {
-
 	home: generateNgxRoute(), // generateNgxRoute creates an object
-
 	users: generateNgxRoute('users'),
-
 	singleUser: generateNgxRoute('users/:id'),
-
 	productCart: generateNgxRoute('product/:productId/cart/:cartId'),
-
 }
 
-  
-
 ```
-
-  
 
 **Step 2** Add to the angular routes
 
-  
 ```
 export const routes: Routes = [
 	{
@@ -83,14 +56,12 @@ export const routes: Routes = [
 	}
 ]
 
- ```
+```
 
 **Step 3** Register in App.modules.ts or app.config.ts
 
 ```
 import { NgxRouteManagerModule } from 'ngx-route-manager';
-
-  
 
 // Using with App.modules.ts (none standalone)
 
@@ -100,7 +71,6 @@ imports: [
 	...
 ]
 
-  
 // Using with app.config.ts (standalone)
 
 providers: [
@@ -111,63 +81,53 @@ providers: [
 
 ```
 
-  
-
 ## Use
-
-
 
 Simply call the route created into the component, directive etc for use
 
-  
 Component.ts
 ```
+import { Component, inject } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { NgxRouteManagerService } from 'ngx-route-manager';
+
 @Component({})
-
 export class YourComponent {
+  routes = ngxRoutes;
+  private route = inject(ActivatedRoute);
+  private routeManagerService = inject(NgxRouteManagerService);
 
-routes = ngxRoutes;
+  constructor() {
+    // Optionally update internal route state using NgxRouteManagerService
+    this.routeManagerService.updateRoute(this.route);
+  }
 
+  getRoutes() {
+    const homeRoute = routes.home.fn(); // outputs: ''
+    const usersRoute = routes.users.fn(); // outputs: 'users'
+    const singleUserRoute = routes.singleUser.fn({ id: '1234'}); // outputs: 'users/1234'
+    const productCartRoute = routes.productCart.fn({ productId: '1234', cartId: 'abgh'}) // outputs: 'product/1234/cart/abgh'
+  }
 
-getRoutes() {
-	const homeRoute = routes.home.fn(); // outputs: ''
+  getSnapshot() {
+    // Pass ActivatedRoute directly to snapshotValue() or rely on routeManagerService.updateRoute()
+    const singleUserId = routes.singleUser.params.id.snapshotValue(this.route);
+    const productId = routes.productCart.params.productId.snapshotValue();
+    const cartId = routes.productCart.params.cartId.snapshotValue();
+  }
 
-	const usersRoute = routes.users.fn(); // outputs: 'users'
+  listenForValueChanges() {
+    // listenForValue() returns an observable that checks for the change in value for the param in the url
+    const singleUserIdSub = routes.singleUser.params.id.listenForValue(this.route).subscribe(...);
+    const productIdSub = routes.productCart.params.productId.listenForValue().subscribe(...);
+    const cartIdSub = routes.productCart.params.cartId.listenForValue().subscribe(...);
 
-	const singleUserRoute = routes.singleUser.fn({ id: '1234'}); // outputs: 'users/1234'
-
-	const productCartRoute = routes.productCart.fn({ productId: '1234', cartId: 'abgh'}) // outputs: 'product/1234/cart/abgh'
+    // Remember to destroy subscriptions
+  }
 }
-
-  
-
-getSnapshot() {
-	const singleUserId = routes.singleUser.params.id.snapshotValue();
-
-	const productId = routes.productCart.params.productId.snapshotValue();
-
-	const cartId = routes.productCart.params.cartId.snapshotValue();
-}
-
-  
-
-listenForValueChanges() {
-
-	// listenForValue() returns an observable that checks for the change in value for the param in the url
-
-	const singleUserIdSub = routes.singleUser.params.id.listenForValue().subscribe(...);
-
-	const productIdSub = routes.productCart.params.productId.listenForValue().subscribe(...);
-
-	const cartIdSub = routes.productCart.params.cartId.listenForValue().subscribe(...);
-
-  
-
-// Remember to destroy subscriptions
-
 ```
 
-  Component.html
+Component.html
 ```
 
 html file
@@ -190,11 +150,7 @@ html file
 
 <a [routerLink]="['/' + routes.productCart.fn({ productId: '1234', cartId: 'abgh' })]">Single user</a>
 
-  
-
 <h2>Snapshot</h2> -------------------------------------------------------------------
-
-  
 
 <p>Single User Id: {{ routes.singleUser.params.id.snapshotValue() }}</p>
 
@@ -202,11 +158,7 @@ html file
 
 <p>Cart Id: {{ routes.productCart.params.cartId.snapshotValue() }}</p>
 
-  
-
 <h2>Subscriptions</h2> -------------------------------------------------------------------
-
-  
 
 <p>Single User Id: {{ routes.singleUser.params.id.listenForValue() | async }}</p>
 
@@ -233,5 +185,22 @@ These are the types of object found in the RouteParams.
 
 |Name            |Description                    
 |----------------|-------------------------------
-|snapshotValue: string            |Returns the current value of the param in the url if found (same as ActivatedRoute:snapshot)
-|listenForValue: observable< string > | Returns an observable that listens for changes in the url, to get the param value (same as ActivatedRoute:paramMap)
+|snapshotValue(route?: ActivatedRoute): string |Returns the current value of the param in the url if found (same as ActivatedRoute:snapshot). Accepts an optional `ActivatedRoute` parameter to update route.
+|listenForValue(route?: ActivatedRoute): observable< string > | Returns an observable that listens for changes in the url, to get the param value (same as ActivatedRoute:paramMap). Accepts an optional `ActivatedRoute` parameter to update route.
+
+### NgxRouteManagerService
+
+`NgxRouteManagerService` provides a service to update `internalSignalRoute` from component logic.
+
+```typescript
+import { NgxRouteManagerService } from 'ngx-route-manager';
+
+constructor(private routeManagerService: NgxRouteManagerService, private route: ActivatedRoute) {
+  this.routeManagerService.updateRoute(this.route);
+}
+```
+
+| Method / Property | Description |
+| ----------------- | ----------- |
+| `updateRoute(route: ActivatedRoute): void` | Updates internal signal route with the specified `ActivatedRoute`. |
+| `currentRoute: ActivatedRoute \| undefined` | Gets the currently stored `ActivatedRoute`. |

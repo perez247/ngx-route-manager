@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ngxRoutes } from '../../ngx-routes';
+import { NgxRouteManagerService } from 'ngx-route-manager';
 
 @Component({
   selector: 'app-fifth',
@@ -11,4 +12,10 @@ import { ngxRoutes } from '../../ngx-routes';
 })
 export class FifthComponent {
   routes = ngxRoutes;
+  private route = inject(ActivatedRoute);
+  private routeManagerService = inject(NgxRouteManagerService);
+
+  constructor() {
+    this.routeManagerService.updateRoute(this.route);
+  }
 }

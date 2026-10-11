@@ -1,5 +1,5 @@
-import { filter, map, of } from "rxjs";
-import { computed } from "@angular/core";
+import { filter, map, of, Observable } from "rxjs";
+import { ActivatedRoute } from "@angular/router";
 import { internalSignalRoute } from "../functions/listenForRouteChange";
 
 export class NgxParam {
@@ -13,31 +13,35 @@ export class NgxParam {
   }
 
   /**
-   * Returns the current snapshoot of the value in the url route
+   * Returns the current snapshot of the value in the url route
    */
-  readonly snapshotValue = computed(() => {
-    if (!internalSignalRoute()) { return '' }
-    else {
-      return internalSignalRoute()?.snapshot.paramMap.get(this.name) || ''
+  public snapshotValue(route?: ActivatedRoute): string {
+    if (route) {
+      internalSignalRoute.set(route);
     }
-  })
+    const currentRoute = internalSignalRoute();
+    if (!currentRoute) {
+      return '';
+    }
+    return currentRoute.snapshot.paramMap.get(this.name) || '';
+  }
 
   /**
    * Listens for change on param in the route
    */
-  readonly listenForValue = computed(() => {
-    if (!internalSignalRoute()) { 
-      console.log(internalSignalRoute());
-      return of('') 
+  public listenForValue(route?: ActivatedRoute): Observable<string> {
+    if (route) {
+      internalSignalRoute.set(route);
     }
-    else {
-      return internalSignalRoute()?.paramMap
-      .pipe(
-        filter(paramMap => paramMap.has(this.name)),
-        map(paramMap => paramMap.get(this.name) || '')
-      )
+    const currentRoute = internalSignalRoute();
+    if (!currentRoute) {
+      return of('');
     }
-  })
+    return currentRoute.paramMap.pipe(
+      filter(paramMap => paramMap.has(this.name)),
+      map(paramMap => paramMap.get(this.name) || '')
+    );
+  }
 
   constructor(name: string) {
     this._name = name;

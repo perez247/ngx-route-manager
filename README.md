@@ -83,9 +83,20 @@ Simply call the route created into the component, directive etc for use
 Component.ts
 
 ```
+import { Component, inject } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { NgxRouteManagerService } from 'ngx-route-manager';
+
 @Component({})
 export class YourComponent {
   routes = ngxRoutes;
+  private route = inject(ActivatedRoute);
+  private routeManagerService = inject(NgxRouteManagerService);
+
+  constructor() {
+    // Optionally update the active route using NgxRouteManagerService
+    this.routeManagerService.updateRoute(this.route);
+  }
 
   getRoutes() {
     const homeRoute = routes.home.fn(); // outputs: ''
@@ -100,15 +111,17 @@ export class YourComponent {
   }
 
   getSnapshot() {
-    const singleUserId = routes.singleUser.params.id.snapshotValue();
+    // Pass ActivatedRoute directly or ensure routeManagerService.updateRoute(this.route) was called
+    const singleUserId = routes.singleUser.params.id.snapshotValue(this.route);
     const productId = routes.productCart.params.productId.snapshotValue();
     const cartId = routes.productCart.params.cartId.snapshotValue();
     const debug = routes.singleUser.queryParams.debug.snapshotValue();
   }
 
   listenForValueChanges() {
-    // listenForValue() returns an observable that checks for the change in value for the param in the url
-    const singleUserIdSub = routes.singleUser.params.id.listenForValue().subscribe(...);
+    // listenForValue() returns an observable that checks for the change in value for the param in the url.
+    // Accepts an optional ActivatedRoute parameter to update the active route.
+    const singleUserIdSub = routes.singleUser.params.id.listenForValue(this.route).subscribe(...);
     const productIdSub = routes.productCart.params.productId.listenForValue().subscribe(...);
     const cartIdSub = routes.productCart.params.cartId.listenForValue().subscribe(...);
     const debugSub = routes.singleUser.queryParams.debug.listenForValue().subscribe(...);
@@ -167,13 +180,31 @@ generateNgxRoute return a NgxRoute Object
 | queryParams: RouteQueryParams     | Contains all the query params (**NgxParam**) generated from the query params keys passed                                    |
 | segments:                         | Contains the different none params of the url string pattern passed                                                         |
 
-### NgxParam
+### NgxParam / NgxQueryParam
 
-These are the types of object found in the RouteParams.
+These are the types of object found in the RouteParams / RouteQueryParams.
 
 | Name                                 | Description                                                                                                                                                                                |
 | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| snapshotValue: string                | Returns the current value of the param in the url if found (same as ActivatedRoute:snapshot)                                                                                               |
-| listenForValue: observable< string > | Returns an observable that listens for changes in the url, to get the param value (same as ActivatedRoute:paramMap). Recommended to be used within the HTML file and/or ngOnint() for now. |
+| snapshotValue(route?: ActivatedRoute): string | Returns the current value of the param in the url if found (same as ActivatedRoute:snapshot). Accepts an optional `ActivatedRoute` to update the active route before evaluating. |
+| listenForValue(route?: ActivatedRoute): observable< string > | Returns an observable that listens for changes in the url, to get the param value (same as ActivatedRoute:paramMap). Accepts an optional `ActivatedRoute` to update the active route. |
+
+### NgxRouteManagerService
+
+`NgxRouteManagerService` provides an injectable service to manage and update the internal active route (`internalSignalRoute`).
+
+```typescript
+import { NgxRouteManagerService } from 'ngx-route-manager';
+
+// Inject service into component or guard
+constructor(private routeManagerService: NgxRouteManagerService, private route: ActivatedRoute) {
+  this.routeManagerService.updateRoute(this.route);
+}
+```
+
+| Method / Property | Description |
+| ----------------- | ----------- |
+| `updateRoute(route: ActivatedRoute): void` | Updates the internal signal route with the current component's `ActivatedRoute`. |
+| `currentRoute: ActivatedRoute \| undefined` | Returns the currently stored `ActivatedRoute`. |
 
 **Note:** The file `generate-path.ts` has been renamed to `generate-ngx-route.ts`.
